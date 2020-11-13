@@ -4,6 +4,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <netcdf.h>
+#include <time.h>
 
 using namespace std;
 
@@ -63,11 +64,20 @@ int main(int argc, char ** argv){
   double * times = (double*) malloc(sizeof(double) * timesteps);
   ret = nc_get_var_double (ncid, id_var_date, times);
   CHECK_ERR(ret);
+
   // find october
-  // datetime(1,1,1) + hours(NumberFromNetCDFFile)
+  // convert: days 62,092 between 1/1/1800 and 1/1/1970
+  int hours_1800 = 62091 * 24;
 
   for(size_t i = 0 ; i < timesteps; i++){
-    cout << times[i] << endl;
+    long time = (times[i] - hours_1800) * 3600;
+    struct tm date;
+    gmtime_r(& time, & date);
+    char buffer[200];
+    strftime(buffer, 200, "%Y-%m-%d %H:%M:%S", & date);
+    if(date.tm_mon == 9){ // october
+      cout << buffer << endl;
+    }
   }
 
   /* Close the file */
