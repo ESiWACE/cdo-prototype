@@ -153,18 +153,16 @@ int main(int argc, char ** argv){
   CHECK_ERR(ret);
 
   // define dimensions
-  int dimidsp[3];
+  int dimidsp[2];
   int out_var_id;
 
-  ret = nc_def_dim(ncid, "time", t_index, & dimidsp[0]);
+  ret = nc_def_dim(ncid, "lon", temp_size[0], & dimidsp[0]);
   CHECK_ERR(ret);
-  ret = nc_def_dim(ncid, "lon", temp_size[1], & dimidsp[1]);
-  CHECK_ERR(ret);
-  ret = nc_def_dim(ncid, "lat", temp_size[2], & dimidsp[2]);
+  ret = nc_def_dim(ncid, "lat", temp_size[1], & dimidsp[1]);
   CHECK_ERR(ret);
 
   // define variable
-  ret = nc_def_var	(ncid, "temp", NC_FLOAT, 3, dimidsp, & out_var_id);
+  ret = nc_def_var	(ncid, "temp", NC_FLOAT, 2, dimidsp, & out_var_id);
   CHECK_ERR(ret);
 
   ret = nc_enddef(ncid);
